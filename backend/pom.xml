@@ -1,20 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
          http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    
+    <!-- pom.xml is the Project Object Model file for Maven - it defines how to build the project -->
+    <modelVersion>4.0.0</modelVersion> <!-- This is always 4.0.0 for Maven 2/3 -->
 
-    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.branchflow</groupId>
+        <artifactId>branchflow-parent</artifactId>
+        <version>1.0.0</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
 
-    <groupId>com.branchflow</groupId>
-    <artifactId>branchflow-backend</artifactId>
-    <version>0.1.0</version>
+    <!-- Project coordinates - these uniquely identify your project in Maven Central -->
+    <groupId>com.branchflow</groupId> <!-- Usually your company/package name reversed -->
+    <artifactId>branchflow-backend</artifactId> <!-- Name of your project/jar file -->
+    <version>0.1.0</version> <!-- 0.1.0 means first development version, not ready for production -->
+    <packaging>jar</packaging> <!-- This will build as a JAR file (not WAR for web apps) -->
+
+    <!-- Project metadata -->
+    <name>BranchFlow Backend</name>
+    <description>Transaction engine for multi-branch restaurant ordering and dispatch</description>
 
     <properties>
-        <java.version>17</java.version>
+        <!-- Properties are variables we can reuse throughout the POM -->
+        <java.version>17</java.version> <!-- Force Java 17 (LTS version) -->
+        <maven.compiler.source>17</maven.compiler.source> <!-- Source code uses Java 17 -->
+        <maven.compiler.target>17</maven.compiler.target> <!-- Compiled code targets Java 17 -->
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding> <!-- Use UTF-8 for all text files -->
+        <start-class>com.branchflow.BranchflowApplication</start-class>
     </properties>
 
     <dependencies>
-        <!-- Spring Boot dependencies will be added incrementally -->
+        <!-- Spring Boot Starters - curated sets of dependencies that work together -->
+        
+        <!-- Web/REST API support - includes Tomcat server and Spring MVC -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <!-- No version needed - inherited from parent -->
+        </dependency>
+
+        <!-- Database access - Spring Data JPA with Hibernate -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+
+        <!-- PostgreSQL driver - lets Java talk to PostgreSQL -->
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>42.6.0</version> <!-- Version specified because not managed by Spring Boot -->
+            <scope>runtime</scope> <!-- Only needed at runtime, not for compilation -->
+        </dependency>
+
+        <!-- Validation API - for validating incoming JSON requests -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+
+        <!-- Development tools - auto-restart, live reload, etc. -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <scope>runtime</scope> <!-- Not included in production builds -->
+            <optional>true</optional> <!-- Not transitive - projects depending on us won't get this -->
+        </dependency>
+
+        <!-- Testing support - JUnit, Mockito, etc. -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope> <!-- Only used for testing, not in main code -->
+        </dependency>
     </dependencies>
 
+    <build>
+        <plugins>
+            <!-- Spring Boot Maven plugin - packages the app into an executable JAR -->
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <!-- Makes the JAR executable with java -jar -->
+                    <executable>true</executable>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>
